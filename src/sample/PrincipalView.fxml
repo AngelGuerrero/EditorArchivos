@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.PrincipalController">
+  <children>
+    <BorderPane prefHeight="600.0" prefWidth="800.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+      <bottom>
+        <HBox spacing="10.0" style="-fx-background-color: #555555;">
+          <children>
+            <Label fx:id="lblDocumentName" text="lblDocumentName" textFill="#66edff" />
+            <Label fx:id="lblDocumentStatus" text="lblDocumentStatus" textFill="#fffb99" />
+          </children>
+          <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" fx:id="x1" />
+          </padding>
+        </HBox>
+      </bottom>
+      <center>
+        <VBox fx:id="vboxCenter" alignment="CENTER" disable="false" fillWidth="true" style="-fx-border-color: red;&#10;-fx-background-color: #555555;">
+          <children>
+            <Label fx:id="lblInitialMessage" alignment="CENTER" text="Create new file Ctrl + N">
+              <font>
+                <Font name="Segoe UI" size="18.0" />
+              </font>
+            </Label>
+          </children>
+        </VBox>
+      </center>
+      <left>
+        <VBox>
+          <children>
+            <VBox alignment="CENTER" padding="$x1" style="-fx-background-color: #555555;">
+              <children>
+                <Label style="-fx-text-fill: white;" text="Explorador">
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Label>
+              </children>
+            </VBox>
+            <TreeView fx:id="treeViewEditor" prefHeight="360.0" prefWidth="230.0" VBox.vgrow="ALWAYS" />
+          </children>
+          <padding>
+            <Insets />
+          </padding>
+        </VBox>
+      </left>
+      <top>
+        <MenuBar fx:id="menuBar">
+          <menus>
+            <Menu mnemonicParsing="false" text="_Archivo">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#openNewFileWindow" text="Nuevo archivo..." fx:id="menuItemNewFile" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" text="Abrir archivo.." fx:id="menuItemOpenFile" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" text="Guardar" fx:id="menuItemSave" />
+                <MenuItem mnemonicParsing="false" text="Guardar como..." fx:id="menuItemSaveAs" />
+                <MenuItem mnemonicParsing="false" text="Abrir ubicacion del archivo..." fx:id="menuItemOpenLocationFile" />
+                <MenuItem mnemonicParsing="false" text="Renombrar documento..." fx:id="menuItemRenameFile" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" text="Cerrar documento" fx:id="menuItemCloseFile" />
+                <MenuItem mnemonicParsing="false" text="Eliminar documento..." fx:id="menuItemDeleteFile" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" text="Salir" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="_Ver">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Ver explorador de archivos" fx:id="menuItemToggleExplorer" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Ay_uda">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Acerca del programa" />
+              </items>
+            </Menu>
+          </menus>
+        </MenuBar>
+      </top>
+    </BorderPane>
+  </children>
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+</GridPane>
