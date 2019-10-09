@@ -4,17 +4,18 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class Main extends Application {
 
+    private String filenameview = "PrincipalView.fxml";
+
     @Override
-    public void start(Stage stage) throws Exception {
-        PrincipalController principalController = new PrincipalController();
-        principalController.start(stage);
+    public void start(Stage pStage) throws Exception {
+        Parent root = FXMLLoader.load(Main.class.getResource(this.filenameview));
+        pStage.setTitle("Awesome editor");
+        pStage.setScene(new Scene(root));
+        pStage.show();
     }
 
 
@@ -22,10 +23,4 @@ public class Main extends Application {
         launch(args);
     }
 
-
-    public static void loadView(Stage stage, String filename) throws IOException {
-        Parent root = FXMLLoader.load(Main.class.getResource(filename));
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
 }
