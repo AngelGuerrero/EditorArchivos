@@ -102,7 +102,7 @@ public class NewFileController implements Initializable {
         }
 
         //
-        // Save the file inside
+        // Save the file into static variable
         PrincipalController.staticCurrentOpenedFile = file;
 
         this.closeWindow();
@@ -111,7 +111,8 @@ public class NewFileController implements Initializable {
 
     private Response createFile(File pFile) {
         try {
-            new FileWriter(pFile);
+            FileWriter file = new FileWriter(pFile);
+            file.close();
         } catch (IOException e) {
             return new Response(false, null, e.getMessage());
         }

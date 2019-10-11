@@ -123,9 +123,11 @@ public class PrincipalController implements Initializable {
         NewFileController newFileController = new NewFileController();
         newFileController.show();
 
-        if (staticCurrentOpenedFile != null) {
-            System.out.println(staticCurrentOpenedFile.getAbsolutePath());
-        }
+        if (staticCurrentOpenedFile == null) return;
+
+        //
+        // Opens just created file
+        this.openFile(staticCurrentOpenedFile);
     }
 
 
@@ -146,6 +148,22 @@ public class PrincipalController implements Initializable {
         //
         // Open and show the selected file in the view
         this.openFile(selectedFile);
+    }
+
+
+    @FXML
+    public void saveFile() {
+        //
+        // No file selected
+        if (staticCurrentOpenedFile == null) return;
+
+        Response response = this.saveFile(this.textAreaEditor, staticCurrentOpenedFile);
+
+        if (response.ok) {
+            Message.setLabelSuccess(this.lblDocumentStatus, response.message);
+        } else {
+            Message.setLabelError(this.lblDocumentStatus, response.message);
+        }
     }
 
 
@@ -173,6 +191,7 @@ public class PrincipalController implements Initializable {
     }
 
 
+    /// ------------------------------------->>> PRIVATE METHODS
     private void openFile(File pFile) {
         //
         // Load the file content into text area component
@@ -194,6 +213,19 @@ public class PrincipalController implements Initializable {
         // Show the messages to principal window
         Message.setLabelInfo(this.lblDocumentName, "File: " + pFile.getName());
         Message.setLabelSuccess(this.lblDocumentStatus, "Status: " + response.message);
+    }
+
+
+    private Response saveFile(TextArea pTextArea, File pFile) {
+        try {
+            FileWriter fileWriter = new FileWriter(pFile, true);
+            fileWriter.write(pTextArea.getText());
+            fileWriter.close();
+        } catch (IOException e) {
+            return new Response(false, null, e.getMessage());
+        }
+
+        return new Response(true, pFile, "saved successfully!");
     }
 
 
