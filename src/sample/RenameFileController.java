@@ -2,13 +2,18 @@ package sample;
 
 import javafx.fxml.FXML;
 
+import java.io.File;
 import java.io.IOException;
 
-final public class NewFileController extends FileController  {
+final public class RenameFileController extends FileController {
 
-    public NewFileController() throws IOException {
+    private File file;
+
+
+    RenameFileController(File file) throws IOException {
         super();
         this.loadController(this);
+        this.file = file;
     }
 
 
@@ -20,14 +25,14 @@ final public class NewFileController extends FileController  {
         this.commonInitializeControls();
         //
         // Set the button action for create new file
-        this.btnAccept.setOnAction(e -> this.createNewFile());
+        this.btnAccept.setOnAction(e -> this.renameFile(this.file, this.textFieldFileName.getText()));
     }
 
 
-    public void showAndWaitForCreatingFile() {
+    void showAndWaitForRenameFile() {
         //
         // Configure its own window
-        stage.setTitle("New file");
+        stage.setTitle("Rename file");
         //
         stage.showAndWait();
     }

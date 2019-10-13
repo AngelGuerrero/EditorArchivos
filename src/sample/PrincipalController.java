@@ -1,7 +1,6 @@
 package sample;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -11,15 +10,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.*;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
 
-public class PrincipalController implements Initializable {
+public class PrincipalController {
 
-    public static boolean sIsFileOpen;
 
-    public static File staticCurrentOpenedFile;
+    private static File staticCurrentOpenedFile;
 
     //
     // Menu items
@@ -79,14 +74,18 @@ public class PrincipalController implements Initializable {
     private TreeItem rootItemOpenedFiles;
 
 
+    /// --------------------------------------------------
+    /// Public methods
+    /// --------------------------------------------------
+
+
     public PrincipalController() {
-        sIsFileOpen = false;
         staticCurrentOpenedFile = null;
     }
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
         //
         // Short Keys registration
         //
@@ -96,6 +95,8 @@ public class PrincipalController implements Initializable {
         this.menuItemOpenFile.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
         // Save file
         this.menuItemSave.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+        // Rename file menu
+        this.menuItemRenameFile.setDisable(true);
         // Close file
         this.menuItemCloseFile.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
         // Explorer files
@@ -121,19 +122,45 @@ public class PrincipalController implements Initializable {
     @FXML
     public void showNewFileWindow() throws Exception {
         NewFileController newFileController = new NewFileController();
-        newFileController.show();
+        newFileController.showAndWaitForCreatingFile();
+
+        if (newFileController.response.ok) {
+            //
+            // Opens just created file
+            this.openFile((File)newFileController.response.data);
+        }
+    }
+
+
+    @FXML
+    public void showRenameFileWindow() throws Exception {
 
         if (staticCurrentOpenedFile == null) return;
 
-        //
-        // Opens just created file
-        this.openFile(staticCurrentOpenedFile);
+        RenameFileController renameFileController = new RenameFileController(staticCurrentOpenedFile);
+        renameFileController.showAndWaitForRenameFile();
+
+        if (renameFileController.response.ok) {
+            // - remove tree list
+            // - add tree list
+            // - change name
+            // - show status
+            // - change static file
+            this.removeTreeViewItem(staticCurrentOpenedFile.getName(), this.rootItemOpenedFiles);
+            this.addTreeViewItem(((File)renameFileController.response.data).getName(), this.rootItemOpenedFiles);
+
+            Message.setLabelSuccess(this.lblDocumentName, ((File)renameFileController.response.data).getName());
+            Message.setLabelSuccess(this.lblDocumentStatus, renameFileController.response.message);
+            staticCurrentOpenedFile = (File)renameFileController.response.data;
+        } else if (!renameFileController.response.ok && !renameFileController.response.message.equals("cancel")) {
+            Message.showError("Error renaming file", renameFileController.response.message, "");
+            Message.setLabelError(this.lblDocumentStatus, renameFileController.response.message);
+        }
     }
 
 
     @FXML
     public void showOpenFileDialog() {
-        String initialDir = System.getProperty("user.home");
         //
         // Open file chooser dialog
         FileChooser fileChooser = new FileChooser();
@@ -180,6 +207,9 @@ public class PrincipalController implements Initializable {
         this.vboxCenter.getChildren().add(this.lblInitialMessage);
         VBox.setVgrow(this.lblInitialMessage, Priority.ALWAYS);
         //
+        // Disable option for rename file
+        this.menuItemRenameFile.setDisable(true);
+        //
         // Show the messages for user
         Message.setLabelInfo(this.lblDocumentName, "No file selected");
         Message.setLabelSuccess(this.lblDocumentStatus, "Ready!");
@@ -191,7 +221,11 @@ public class PrincipalController implements Initializable {
     }
 
 
-    /// ------------------------------------->>> PRIVATE METHODS
+    /// --------------------------------------------------
+    /// Private methods
+    /// --------------------------------------------------
+
+
     private void openFile(File pFile) {
         //
         // Load the file content into text area component
@@ -210,15 +244,18 @@ public class PrincipalController implements Initializable {
         // Shows the file in tree view editor
         this.addTreeViewItem(pFile.getName(), this.rootItemOpenedFiles);
         //
+        // Enable option for rename file
+        this.menuItemRenameFile.setDisable(false);
+        //
         // Show the messages to principal window
-        Message.setLabelInfo(this.lblDocumentName, "File: " + pFile.getName());
-        Message.setLabelSuccess(this.lblDocumentStatus, "Status: " + response.message);
+        Message.setLabelInfo(this.lblDocumentName, pFile.getName());
+        Message.setLabelSuccess(this.lblDocumentStatus, response.message);
     }
 
 
     private Response saveFile(TextArea pTextArea, File pFile) {
         try {
-            FileWriter fileWriter = new FileWriter(pFile, true);
+            FileWriter fileWriter = new FileWriter(pFile);
             fileWriter.write(pTextArea.getText());
             fileWriter.close();
         } catch (IOException e) {
