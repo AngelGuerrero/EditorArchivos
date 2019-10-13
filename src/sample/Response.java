@@ -12,4 +12,10 @@ public class Response {
         this.data = data;
         this.message = message;
     }
+
+    public Response() {
+        this.ok = false;
+        this.data = null;
+        this.message = "";
+    }
 }
