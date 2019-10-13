@@ -10,6 +10,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class PrincipalController {
 
@@ -32,7 +35,7 @@ public class PrincipalController {
     private MenuItem menuItemSaveAs;
 
     @FXML
-    private MenuItem menuItemOpenLocationFile;
+    private MenuItem menuItemRevealInExplorer;
 
     @FXML
     private MenuItem menuItemRenameFile;
@@ -74,6 +77,12 @@ public class PrincipalController {
     private TreeItem rootItemOpenedFiles;
 
 
+    //
+    // The menu items can be toggled
+    // based static file
+    private List<MenuItem> menuItemsList;
+
+
     /// --------------------------------------------------
     /// Public methods
     /// --------------------------------------------------
@@ -95,8 +104,6 @@ public class PrincipalController {
         this.menuItemOpenFile.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
         // Save file
         this.menuItemSave.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-        // Rename file menu
-        this.menuItemRenameFile.setDisable(true);
         // Close file
         this.menuItemCloseFile.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
         // Explorer files
@@ -110,6 +117,16 @@ public class PrincipalController {
         this.textAreaEditor = new TextArea();
         this.textAreaEditor.prefWidthProperty().bind(this.vboxCenter.widthProperty());
         this.textAreaEditor.setPrefRowCount(10);
+        //
+        // Add the menu items for disable and enable
+        this.menuItemsList = new ArrayList<>();
+        this.menuItemsList.add(this.menuItemSave);
+        this.menuItemsList.add(this.menuItemSaveAs);
+        this.menuItemsList.add(this.menuItemRevealInExplorer);
+        this.menuItemsList.add(this.menuItemCloseFile);
+        this.menuItemsList.add(this.menuItemRenameFile);
+        this.menuItemsList.add(this.menuItemDeleteFile);
+        this.toggleMenuItemsOptions(true);
     }
 
 
@@ -127,7 +144,7 @@ public class PrincipalController {
         if (newFileController.response.ok) {
             //
             // Opens just created file
-            this.openFile((File)newFileController.response.data);
+            this.openFile((File) newFileController.response.data);
         }
     }
 
@@ -147,11 +164,11 @@ public class PrincipalController {
             // - show status
             // - change static file
             this.removeTreeViewItem(staticCurrentOpenedFile.getName(), this.rootItemOpenedFiles);
-            this.addTreeViewItem(((File)renameFileController.response.data).getName(), this.rootItemOpenedFiles);
+            this.addTreeViewItem(((File) renameFileController.response.data).getName(), this.rootItemOpenedFiles);
 
-            Message.setLabelSuccess(this.lblDocumentName, ((File)renameFileController.response.data).getName());
+            Message.setLabelSuccess(this.lblDocumentName, ((File) renameFileController.response.data).getName());
             Message.setLabelSuccess(this.lblDocumentStatus, renameFileController.response.message);
-            staticCurrentOpenedFile = (File)renameFileController.response.data;
+            staticCurrentOpenedFile = (File) renameFileController.response.data;
         } else if (!renameFileController.response.ok && !renameFileController.response.message.equals("cancel")) {
             Message.showError("Error renaming file", renameFileController.response.message, "");
             Message.setLabelError(this.lblDocumentStatus, renameFileController.response.message);
@@ -207,8 +224,8 @@ public class PrincipalController {
         this.vboxCenter.getChildren().add(this.lblInitialMessage);
         VBox.setVgrow(this.lblInitialMessage, Priority.ALWAYS);
         //
-        // Disable option for rename file
-        this.menuItemRenameFile.setDisable(true);
+        // Disable options for rename file
+        this.toggleMenuItemsOptions(true);
         //
         // Show the messages for user
         Message.setLabelInfo(this.lblDocumentName, "No file selected");
@@ -218,6 +235,33 @@ public class PrincipalController {
         this.removeTreeViewItem(staticCurrentOpenedFile.getName(), this.rootItemOpenedFiles);
 
         staticCurrentOpenedFile = null;
+    }
+
+
+    @FXML
+    public void deleteCurrentFile() {
+        if (staticCurrentOpenedFile == null) return;
+
+        Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationDialog.setTitle("Delete file");
+        confirmationDialog.setHeaderText("are you sure you want delete file: '" + staticCurrentOpenedFile.getName() + "' ?");
+        Optional<ButtonType> resultDialog = confirmationDialog.showAndWait();
+
+        if (resultDialog.get() == ButtonType.OK) {
+            //
+            // Create an auxiliary variable for delete the file
+            File auxFile = new File(String.valueOf(staticCurrentOpenedFile));
+
+            if (auxFile.delete()) {
+                this.closeCurrentFile();
+                Message.showInfo("Deleting file", "File deleted successfully!", "");
+            } else {
+                Message.showError("Error deleting file", "Something went wrong trying deleting the current file", "");
+                ;
+            }
+        }
+
+        confirmationDialog.close();
     }
 
 
@@ -244,8 +288,8 @@ public class PrincipalController {
         // Shows the file in tree view editor
         this.addTreeViewItem(pFile.getName(), this.rootItemOpenedFiles);
         //
-        // Enable option for rename file
-        this.menuItemRenameFile.setDisable(false);
+        // Enable options when file is opened
+        this.toggleMenuItemsOptions(false);
         //
         // Show the messages to principal window
         Message.setLabelInfo(this.lblDocumentName, pFile.getName());
@@ -303,5 +347,10 @@ public class PrincipalController {
 
     private void removeTreeViewItem(String pItem, TreeItem pTreeViewRootItem) {
         pTreeViewRootItem.getChildren().removeIf(item -> item.toString().contains(pItem));
+    }
+
+
+    private void toggleMenuItemsOptions(boolean pValue) {
+        this.menuItemsList.forEach(item -> item.setDisable(pValue));
     }
 }
