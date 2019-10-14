@@ -77,6 +77,8 @@
             <Menu mnemonicParsing="false" text="_View">
               <items>
                 <MenuItem mnemonicParsing="false" text="Explorer" fx:id="menuItemToggleExplorer" />
+                <MenuItem mnemonicParsing="false" onAction="#increaseFontSizeEditor" text="Increase font size" fx:id="menuItemIncreaseFontSize" />
+                <MenuItem mnemonicParsing="false" onAction="#decreaseFontSizeEditor" text="Decrease font size" fx:id="menuItemDecreaseFontSize" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="_Help">
