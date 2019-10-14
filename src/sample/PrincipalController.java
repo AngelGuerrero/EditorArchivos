@@ -2,6 +2,9 @@ package sample;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -9,6 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -192,6 +196,22 @@ public class PrincipalController {
         //
         // Open and show the selected file in the view
         this.openFile(selectedFile);
+    }
+
+
+    @FXML
+    public void revealnFileExplorer() {
+        if (staticCurrentOpenedFile == null) return;
+
+        String operatingSystemName = System.getProperty("os.name").toLowerCase();
+
+        if (operatingSystemName.contains("windows")) {
+            try {
+                Runtime.getRuntime().exec("explorer " + staticCurrentOpenedFile.getParent());
+            } catch (IOException e) {
+                Message.showError("Error opening location file", e.getMessage(),"");
+            }
+        }
     }
 
 

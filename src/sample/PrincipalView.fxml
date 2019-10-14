@@ -65,7 +65,7 @@
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save" fx:id="menuItemSave" />
                 <MenuItem mnemonicParsing="false" text="Save as..." fx:id="menuItemSaveAs" />
-                <MenuItem mnemonicParsing="false" text="Reveal in explorer" fx:id="menuItemRevealInExplorer" />
+                <MenuItem mnemonicParsing="false" onAction="#revealnFileExplorer" text="Reveal in explorer" fx:id="menuItemRevealInExplorer" />
                 <MenuItem mnemonicParsing="false" onAction="#showRenameFileWindow" text="Rename file..." fx:id="menuItemRenameFile" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" onAction="#closeCurrentFile" text="Close file" fx:id="menuItemCloseFile" />
