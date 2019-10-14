@@ -60,6 +60,7 @@
 /* Text area */
 .text-area {
     -fx-text-fill: white;
+    -fx-font-size: 12;
     -fx-background-color: transparent, #333333, transparent, #333333;
 
     -fx-border-width: 1;

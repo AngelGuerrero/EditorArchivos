@@ -53,6 +53,12 @@ public class PrincipalController {
     @FXML
     private MenuItem menuItemToggleExplorer;
 
+    @FXML
+    private MenuItem menuItemIncreaseFontSize;
+
+    @FXML
+    private MenuItem menuItemDecreaseFontSize;
+
     //
     // Labels
     //
@@ -80,11 +86,22 @@ public class PrincipalController {
     // Root item 'opened files'
     private TreeItem rootItemOpenedFiles;
 
-
     //
     // The menu items can be toggled
     // based static file
     private List<MenuItem> menuItemsList;
+
+    //
+    // Minimum font size editor
+    private static final int MIN_FONT_SIZE_EDITOR = 12;
+
+    //
+    // Maximum font size editor
+    private static final int MAX_FONT_SIZE_EDITOR = 40;
+
+    //
+    // Actual font size editor
+    private int currentFontSizeEditor = MIN_FONT_SIZE_EDITOR;
 
 
     /// --------------------------------------------------
@@ -112,6 +129,10 @@ public class PrincipalController {
         this.menuItemCloseFile.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
         // Explorer files
         this.menuItemToggleExplorer.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
+        // Increase font size editor
+        this.menuItemIncreaseFontSize.setAccelerator(new KeyCodeCombination(KeyCode.PLUS, KeyCombination.CONTROL_DOWN));
+        // Decrease font size editor
+        this.menuItemDecreaseFontSize.setAccelerator(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.CONTROL_DOWN));
         //
         // Tree view editor
         this.rootItemOpenedFiles = new TreeItem("OPEN EDITORS");
@@ -130,6 +151,8 @@ public class PrincipalController {
         this.menuItemsList.add(this.menuItemCloseFile);
         this.menuItemsList.add(this.menuItemRenameFile);
         this.menuItemsList.add(this.menuItemDeleteFile);
+        this.menuItemsList.add(this.menuItemIncreaseFontSize);
+        this.menuItemsList.add(this.menuItemDecreaseFontSize);
         this.toggleMenuItemsOptions(true);
     }
 
@@ -264,7 +287,7 @@ public class PrincipalController {
 
         Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationDialog.setTitle("Delete file");
-        confirmationDialog.setHeaderText("are you sure you want delete file: '" + staticCurrentOpenedFile.getName() + "' ?");
+        confirmationDialog.setHeaderText("Are you sure you want delete file: '" + staticCurrentOpenedFile.getName() + "' ?");
         Optional<ButtonType> resultDialog = confirmationDialog.showAndWait();
 
         if (resultDialog.get() == ButtonType.OK) {
@@ -282,6 +305,28 @@ public class PrincipalController {
         }
 
         confirmationDialog.close();
+    }
+
+
+    @FXML
+    public void increaseFontSizeEditor() {
+        if (staticCurrentOpenedFile == null) return;
+
+        if (this.currentFontSizeEditor < MAX_FONT_SIZE_EDITOR) {
+            this.currentFontSizeEditor++;
+            this.textAreaEditor.setStyle("-fx-font-size: " + this.currentFontSizeEditor);
+        }
+    }
+
+
+    @FXML
+    private void decreaseFontSizeEditor() {
+        if (staticCurrentOpenedFile == null) return;
+
+        if (this.currentFontSizeEditor > MIN_FONT_SIZE_EDITOR) {
+            this.currentFontSizeEditor--;
+            this.textAreaEditor.setStyle("-fx-font-size: " + this.currentFontSizeEditor);
+        }
     }
 
 
