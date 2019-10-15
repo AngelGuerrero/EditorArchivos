@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
@@ -76,7 +77,13 @@ public class PrincipalController {
 
     //
     // Text Area
+    @FXML
     private TextArea textAreaEditor;
+
+    //
+    // Aside file explorer
+    @FXML
+    private VBox vboxAsideExplorer;
 
     //
     // TreeView Editor
@@ -305,6 +312,19 @@ public class PrincipalController {
         }
 
         confirmationDialog.close();
+    }
+
+
+    @FXML
+    public void toggleAsideExplorer() {
+        boolean visible = this.vboxAsideExplorer.isVisible();
+
+        if (visible) {
+            this.vboxAsideExplorer.setPrefWidth(0);
+        } else {
+            this.vboxAsideExplorer.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        }
+        this.vboxAsideExplorer.setVisible(!visible);
     }
 
 
