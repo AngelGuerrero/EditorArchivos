@@ -1,6 +1,9 @@
 package sample;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -11,6 +14,8 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.*;
@@ -58,6 +63,9 @@ public class PrincipalController {
 
     @FXML
     private MenuItem menuItemDecreaseFontSize;
+
+    @FXML
+    private MenuItem menuItemAbout;
 
     //
     // Labels
@@ -232,7 +240,7 @@ public class PrincipalController {
             try {
                 Runtime.getRuntime().exec("explorer " + staticCurrentOpenedFile.getParent());
             } catch (IOException e) {
-                Message.showError("Error opening location file", e.getMessage(),"");
+                Message.showError("Error opening location file", e.getMessage(), "");
             }
         }
     }
@@ -327,6 +335,19 @@ public class PrincipalController {
             this.currentFontSizeEditor--;
             this.textAreaEditor.setStyle("-fx-font-size: " + this.currentFontSizeEditor);
         }
+    }
+
+
+    @FXML
+    private void showAboutProgram() throws IOException {
+        Stage stage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("AboutView.fxml"));
+        stage.setTitle("About this program");
+        stage.setScene(new Scene(root, 320, 490));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setMaximized(false);
+        stage.show();
     }
 
 
