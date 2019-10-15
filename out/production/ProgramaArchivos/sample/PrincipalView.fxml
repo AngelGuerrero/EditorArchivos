@@ -25,7 +25,7 @@
         </HBox>
       </bottom>
       <center>
-        <VBox fx:id="vboxCenter" alignment="CENTER" disable="false" fillWidth="true" style="" styleClass="base">
+        <VBox fx:id="vboxCenter" alignment="CENTER" disable="false" fillWidth="true" minWidth="-1.0" prefWidth="-1.0" style="" styleClass="base">
           <children>
             <Label fx:id="lblInitialMessage" alignment="CENTER" prefHeight="72.0" prefWidth="294.0" styleClass="label__status-info" text="Create new file Ctrl + N Open file Ctrl + O" textAlignment="CENTER" wrapText="true">
               <font>
@@ -36,9 +36,9 @@
         </VBox>
       </center>
       <left>
-        <VBox>
+        <VBox fx:id="vboxAsideExplorer" minWidth="-Infinity" prefWidth="-1.0" translateX="0.0">
           <children>
-            <VBox alignment="CENTER" padding="$x1" style="" styleClass="base">
+            <VBox alignment="CENTER" padding="$x1" prefWidth="-1.0" style="" styleClass="base">
               <children>
                 <Label style="" styleClass="label--dark" text="Explorer">
                   <font>
@@ -47,7 +47,7 @@
                 </Label>
               </children>
             </VBox>
-            <TreeView fx:id="treeViewEditor" prefHeight="360.0" prefWidth="230.0" style="-fx-background-color: black;" VBox.vgrow="ALWAYS" />
+            <TreeView fx:id="treeViewEditor" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: black;" VBox.vgrow="ALWAYS" />
           </children>
           <padding>
             <Insets />
@@ -76,7 +76,7 @@
             </Menu>
             <Menu mnemonicParsing="false" text="_View">
               <items>
-                <MenuItem mnemonicParsing="false" text="Explorer" fx:id="menuItemToggleExplorer" />
+                <MenuItem mnemonicParsing="false" onAction="#toggleAsideExplorer" text="Explorer" fx:id="menuItemToggleExplorer" />
                 <MenuItem mnemonicParsing="false" onAction="#increaseFontSizeEditor" text="Increase font size" fx:id="menuItemIncreaseFontSize" />
                 <MenuItem mnemonicParsing="false" onAction="#decreaseFontSizeEditor" text="Decrease font size" fx:id="menuItemDecreaseFontSize" />
               </items>
