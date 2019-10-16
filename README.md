@@ -10,3 +10,17 @@ This program is written in Java, using JavaFX for UI.
 
 ![alt](assets/file-loaded.PNG)
 
+# Use
+
+You can use the program executing the command inside the project: 
+
+``` bash
+ java -jar out/artifacts/ProgramaArchivos/ProgramaArchivos.jar
+```
+
+# TODOS
+
+- Open several files
+- Show the content in several tabs
+- Show the number lines
+- Add color syntax
